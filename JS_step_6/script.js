@@ -17,41 +17,110 @@ P.S. Здесь есть несколько вариантов решения з
 
 'use strict';
 
-'use strict';
 
-const movieDB = {
-    movies: [
-        "Логан",
-        "Лига справедливости",
-        "Ла-ла лэнд",
-        "Одержимость",
-        "Скотт Пилигрим против..."
-    ]
-};
+document.addEventListener('DOMContentLoaded', () => { //дожидаемся построения только DOM структуры
 
-const adImage = document.querySelectorAll('.promo__adv img');
-const promoImg = document.querySelector('.promo__bg');
-const promoGenre = promoImg.querySelector('.promo__genre');
-const movieList = document.querySelector('.promo__interactive-list');
-const movie = document.querySelectorAll('.promo__interactive-item');
+    const movieDB = {
+        movies: [
+            "Логан",
+            "Лига справедливости",
+            "Ла-ла лэнд",
+            "Одержимость",
+            "Скотт Пилигрим против..."
+        ]
+    };
+
+    const adImage = document.querySelectorAll('.promo__adv img');
+    const promoImg = document.querySelector('.promo__bg');
+    const promoGenre = promoImg.querySelector('.promo__genre');
+    const movieList = document.querySelector('.promo__interactive-list');
+    const addForm = document.querySelector('form.add');
+    const addInput = document.querySelector('.adding__input');
+    const checkBox = document.querySelector('[type="checkbox"]');
 
 
-adImage.forEach(item => {
-    item.remove();
-}); //adImage - это псевдо массив
+    addForm.addEventListener('submit', (event) => {
+        event.preventDefault(); //отменили стандартное поведение браузера
 
-promoGenre.textContent = "драма";
+        let newFilm = addInput.value; //в св-ве value будкет то, что ввел user; let - потому что ниже будет менятся
+        const favFilm = checkBox.checked; //отмечен ли чекбокс - если да то возращает True
 
-promoImg.style.backgroundImage = 'url("img/bg.jpg")';
+        if (favFilm) {
+           console.log("Добавляем любимый фильм"); 
+        }
 
-movieList.innerHTML = "";
+        if (newFilm) { // если true-условия будут выполнятся, а если false (юзер ничего не вводит, просто нажимает кнопку подтвердить)-не будут
+            
+            if (newFilm.length > 21) { //сли название фильма больше, чем 21 символ - обрезать его и добавить три точки
+                newFilm = `${newFilm.slice(0, 21)}...`;
+            }
 
-movieDB.movies.sort();
+            movieDB.movies.push(newFilm); //добавляемый введеный пользователем фильм в "базу"
+            sortArr(movieDB.movies); //фунуция сортировки по алфавиту
+            
+            creatFilmList(movieDB.movies, movieList); //создаем новыцй лист из фильмов
+        }
+       
 
-movieDB.movies.forEach((film, i) => {
-    movieList.innerHTML += `
-    <li class="promo__interactive-item">${i+1} ${film}
-        <div class="delete"></div>
-    </li>
-    `;
+        event.target.reset(); // сбрасываем форму, event.target - обращаемся к элменету на котором происходит событие(addForm)
+    });
+
+
+    const deleteAdv = (arr) => { //функция удаления рекламы где arr - просто аргумент
+        arr.forEach(item => {
+            item.remove();
+        });
+    };
+    deleteAdv(adImage); //запускаем функцию чтобы реклама удалилась из блока
+
+
+
+    const makeChanges = () => { //доп функция c разными изменениями на странице
+        promoGenre.textContent = "драма";
+        promoImg.style.backgroundImage = 'url("img/bg.jpg")';
+    };
+    makeChanges(); //запускаем функцию 
+
+    
+    const sortArr = (arr) => { //функция сортировки где arr - какой-то массив
+        arr.sort();
+    };
+    
+
+
+    function creatFilmList(films, parentblock) { // добавляет фильм из "базы"(films) в какой-то блок на странице(parentblock)
+        parentblock.innerHTML = "";
+        sortArr(films); //функция сортировки
+
+        films.forEach((film, i) => {
+            parentblock.innerHTML += `
+        <li class="promo__interactive-item">${i + 1} ${film}
+            <div class="delete"></div>
+        </li>
+        `;
+        });
+
+        document.querySelectorAll('.delete').forEach ((btn, i) => { //i - порядковый номер
+            btn.addEventListener('click', ( ) => {
+                btn.parentElement.remove(); //обращаемся к родительскому элементу, элемент удаляется со страницы
+                movieDB.movies.splice(i, 1); //удаляем элемент из базы
+
+                creatFilmList(films, parentblock); //рекурсия; когда удаляются фильмы  - нумерация тоже будет обнавляться
+            })
+        });
+
+    };
+    creatFilmList(movieDB.movies, movieList); //первый раз надо запустить, чтобы появился список фильмов при первом открытии страницы
+
+    // const delMovie= document.querySelectorAll('.delete');
+    // delMovie.forEach (item => {
+    //     item.addEventListener('click', (e) => {
+    //         const btn = e.target.closest('.delete');
+    //         if (!btn) {
+    //           return;
+    //         }
+            
+    //         btn.parentElement.remove();
+    //     })
+    //   })  - 2 вариант "При клике на мусорную корзину - элемент будет удаляться из списка"
 });
