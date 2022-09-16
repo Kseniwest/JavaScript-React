@@ -16,28 +16,36 @@ a {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
   font-size: 18px;
   font-weight: bold;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: 0.3s all;
   outline: none;
+  border: none;
+  background-color: rgb(214, 214, 214);
+  border-radius: 35px;
 }
 .btn_white {
-  background-color: #fff;
+  background-color: rgb(214, 214, 214);
+}
+.btn_white:hover {
+  background-color: #303030;
+  color: #fff;
 }
 .btn_dark {
   background-color: #303030;
   color: #fff;
   border: none;
 }
+.btn_dark:hover {
+  background-color: rgb(214, 214, 214);
+  color: black;
+}
 .btn_min {
   height: 50px;
 }
 .btn:hover {
-  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .container {
@@ -115,8 +123,8 @@ a {
   left: -5%;
   bottom: -1px;
   z-index: -1;
-  height: 8px;
-  background: #54ED39;
+  height: 2px;
+  background: rgb(32, 189, 103);
 }
 .header__link:last-child {
   margin-right: 0;
@@ -172,7 +180,7 @@ a {
   top: -155px;
   width: 50vw;
   height: 900px;
-  background: rgba(146, 242, 255, 0.15);
+  background: rgba(43, 100, 137, 0.1);
   z-index: -1;
 }
 
@@ -198,7 +206,7 @@ a {
   right: -177px;
   width: 550px;
   height: 359px;
-  background: rgba(251, 254, 93, 0.8);
+  background: rgba(255, 225, 60, 0.8);
   padding: 50px;
   font-size: 24px;
   font-weight: 300;
@@ -247,7 +255,7 @@ a {
   position: absolute;
   width: 1109px;
   height: 780px;
-  background: rgba(243, 255, 222, 0.45);
+  background: rgba(34, 89, 75, 0.1);
   z-index: -1;
   top: 50px;
 }
@@ -334,8 +342,9 @@ a {
 .calculating__field {
   width: 100%;
   margin-top: 50px;
-  background: rgba(146, 242, 255, 0.15);
-  padding: 30px 0 40px 0;
+  background: rgba(32, 189, 103, 0.1);
+  padding: 30px 0 25px 0;
+  border-radius: 60px;
 }
 .calculating__subtitle {
   text-align: center;
@@ -372,6 +381,7 @@ a {
   background: #FFFFFF;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
   border: none;
+  border-radius: 7px;
   text-align: center;
   font-size: 14px;
   cursor: pointer;
@@ -380,15 +390,15 @@ a {
 }
 .calculating__choose-item_active {
   color: #fff;
-  background-color: #54ED39;
+  background-color: rgb(32, 189, 103);
 }
 .calculating__choose_medium {
-  width: 743px;
+  width: 543px;
   justify-content: space-between;
   margin: 30px auto 0 auto;
 }
 .calculating__choose_big {
-  width: 930px;
+  width: 830px;
   justify-content: space-between;
   margin: 30px auto 0 auto;
 }
@@ -431,7 +441,7 @@ a {
   margin-top: 50px;
   padding: 50px 0;
   width: 100%;
-  background: rgba(249, 254, 126, 0.25);
+  background: rgba(255, 225, 60, 0.55);
 }
 .menu__item {
   width: 320px;
@@ -512,7 +522,7 @@ a {
   position: absolute;
   width: 50%;
   height: 499px;
-  background: rgba(243, 255, 222, 0.35);
+  background: rgba(34, 89, 75, 0.1);
   z-index: -1;
   top: -50px;
   left: 0;
