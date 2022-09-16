@@ -10,4 +10,6 @@ JS_step_3 - Practice with functions<br>
 JS_step_4 - Practice with objects and methods<br>
 JS_step_5 - Practice with elements on page<br>
 JS_step_6 - Done with movies project<br>
-JS_step_7 - Create tabs in new project<br>
+
+"Food" project:<br>
+- creating tabs<br>
