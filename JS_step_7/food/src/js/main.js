@@ -43,7 +43,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //TIMER
 
-    const deadline = '2022-10-07';
+    const deadline = '2022-12-31';
    
     //difference beetween curent time and deadline
     function getTimeRemaining (endtime) {
