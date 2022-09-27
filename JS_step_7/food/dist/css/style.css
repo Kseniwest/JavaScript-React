@@ -794,8 +794,18 @@ a {
     justify-content: space-around;
   }
 
+  .offer__text {
+    width: 350px;
+  }
   .offer__slider {
     width: 400px;
+  }
+  .offer__descr {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .offer .bgc_y {
+    width: 70%;
   }
 
   .promotion__timer .timer__block {
@@ -810,6 +820,36 @@ a {
 @media (max-width: 768px) {
   .container {
     max-width: 540px;
+  }
+
+  .header {
+    padding: 10px;
+  }
+  .header__left-block {
+    justify-content: center;
+    min-width: 300px;
+  }
+
+  .tabcontainer {
+    width: 100%;
+  }
+
+  .tabcontent__descr {
+    width: 100%;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 20px;
+    top: 250px;
+  }
+
+  .preview__life {
+    font-size: 14px;
+    margin-left: 10px;
+  }
+
+  .offer__slide {
+    width: 300px;
+    height: 200px;
   }
 }
 @media (max-width: 576px) {
