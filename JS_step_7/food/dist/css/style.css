@@ -74,7 +74,7 @@ a {
   }
 }
 .show {
-  display: block;
+  display: flex;
 }
 
 .hide {
@@ -602,10 +602,11 @@ a {
 
 .modal {
   position: fixed;
-  top: 0;
   left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
   z-index: 1050;
-  display: none;
   width: 100%;
   height: 100%;
   overflow: hidden;
@@ -613,7 +614,7 @@ a {
 }
 .modal__dialog {
   max-width: 500px;
-  margin: 40px auto;
+  margin: auto;
 }
 .modal__content {
   position: relative;
