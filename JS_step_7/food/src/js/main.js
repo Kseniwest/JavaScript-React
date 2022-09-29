@@ -47,16 +47,24 @@ window.addEventListener('DOMContentLoaded', () => {
    
     //difference beetween curent time and deadline
     function getTimeRemaining (endtime) {
+        let days, hours, minutes, seconds;
         const t = Date.parse(endtime) - Date.parse(new Date());
-        //calculate how many milliseconds in a day
-        const days = Math.floor(t/(1000 * 60 * 60 * 24)); 
-        //how many hours are left of the day
-        const hours = Math.floor((t/(1000 * 60 * 60)) % 24);
-        //how many minutes are left of the hour
-        const minutes = Math.floor((t/1000/60) % 60);
-        //how many seconds are left of the hour
-        const seconds = Math.floor((t/1000) % 60);
 
+        if (t <= 0) {
+            days = 0;
+            hours = 0;
+            minutes = 0;
+            seconds = 0;
+        } else {
+        //calculate how many milliseconds in a day
+            days = Math.floor(t/(1000 * 60 * 60 * 24)); 
+        //how many hours are left of the day
+            hours = Math.floor((t/(1000 * 60 * 60)) % 24);
+        //how many minutes are left of the hour
+            minutes = Math.floor((t/1000/60) % 60);
+        //how many seconds are left of the hour
+            seconds = Math.floor((t/1000) % 60);
+        }
         //return an object
         return {
             'total': t,
