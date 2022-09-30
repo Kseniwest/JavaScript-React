@@ -207,11 +207,18 @@ window.addEventListener('DOMContentLoaded', () => {
   const openBtns = document.querySelectorAll('[data-modal]');
   const closeBtn = document.querySelector('[data-close]');
   const modal = document.querySelector('.modal');
+
+  function openModal() {
+    modal.classList.add('show');
+    modal.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+    clearInterval(modalTimerId); //clean timer after first time user see modal automatically
+  }
+
+  ;
   openBtns.forEach(item => {
     item.addEventListener('click', () => {
-      modal.classList.add('show');
-      modal.classList.remove('hide');
-      document.body.style.overflow = 'hidden';
+      openModal();
     });
   });
 
@@ -232,7 +239,19 @@ window.addEventListener('DOMContentLoaded', () => {
     if (e.code === 'Escape' && modal.classList.contains('show')) {
       closeModal();
     }
-  });
+  }); // after 5s modal opens automatically
+
+  const modalTimerId = setTimeout(openModal, 5000); //when user scroll down to the end - modal opens - only one time
+
+  function showModalByScroll() {
+    if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+      openModal();
+      window.removeEventListener('scroll', showModalByScroll);
+    }
+  }
+
+  ;
+  window.addEventListener('scroll', showModalByScroll);
 });
 
 /***/ })

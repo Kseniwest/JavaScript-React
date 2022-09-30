@@ -5,26 +5,26 @@ window.addEventListener('DOMContentLoaded', () => {
     const tabsContent = document.querySelectorAll('.tabcontent');
     const tabsParent = document.querySelector('.tabheader__items');
 
-    function hideTabContent () {
-        tabsContent.forEach (item => {
-              item.classList.add('hide');
-              item.classList.remove('show', 'fade');
+    function hideTabContent() {
+        tabsContent.forEach(item => {
+            item.classList.add('hide');
+            item.classList.remove('show', 'fade');
         });
-        
-        tabs.forEach( item => {
+
+        tabs.forEach(item => {
             item.classList.remove('tabheader__item_active');
         });
     }
 
     //default value 0 if nothing is passed to the function
-    function showTabContent (i = 0) { 
+    function showTabContent(i = 0) {
         tabsContent[i].classList.add('show', 'fade');
         tabsContent[i].classList.remove('hide');
         tabs[i].classList.add('tabheader__item_active');
     }
 
     hideTabContent();
-    showTabContent(); 
+    showTabContent();
 
     //click event handler using delegation
     tabsParent.addEventListener('click', (event) => {
@@ -44,9 +44,9 @@ window.addEventListener('DOMContentLoaded', () => {
     //TIMER
 
     const deadline = '2022-12-31';
-   
+
     //difference beetween curent time and deadline
-    function getTimeRemaining (endtime) {
+    function getTimeRemaining(endtime) {
         let days, hours, minutes, seconds;
         const t = Date.parse(endtime) - Date.parse(new Date());
 
@@ -56,14 +56,14 @@ window.addEventListener('DOMContentLoaded', () => {
             minutes = 0;
             seconds = 0;
         } else {
-        //calculate how many milliseconds in a day
-            days = Math.floor(t/(1000 * 60 * 60 * 24)); 
-        //how many hours are left of the day
-            hours = Math.floor((t/(1000 * 60 * 60)) % 24);
-        //how many minutes are left of the hour
-            minutes = Math.floor((t/1000/60) % 60);
-        //how many seconds are left of the hour
-            seconds = Math.floor((t/1000) % 60);
+            //calculate how many milliseconds in a day
+            days = Math.floor(t / (1000 * 60 * 60 * 24));
+            //how many hours are left of the day
+            hours = Math.floor((t / (1000 * 60 * 60)) % 24);
+            //how many minutes are left of the hour
+            minutes = Math.floor((t / 1000 / 60) % 60);
+            //how many seconds are left of the hour
+            seconds = Math.floor((t / 1000) % 60);
         }
         //return an object
         return {
@@ -78,7 +78,7 @@ window.addEventListener('DOMContentLoaded', () => {
     function getZero(num) {
         if (num >= 0 && num < 10) {
             return `0${num}`;
-        }else{
+        } else {
             return num;
         }
     };
@@ -91,25 +91,25 @@ window.addEventListener('DOMContentLoaded', () => {
         const minutes = timer.querySelector('#minutes');
         const seconds = timer.querySelector('#seconds');
         const timeInterval = setInterval(updateClock, 1000);//run function updateClock() every 1 second
-        
+
         updateClock(); //so that the timer does not blink
-        
+
         //update clock
         function updateClock() {
             const t = getTimeRemaining(endtime);
 
-            days.innerHTML  = getZero(t.days); // from return object in getTimeRemaining(endtime)
-            hours.innerHTML  = getZero(t.hours);
-            minutes.innerHTML  = getZero(t.minutes);
-            seconds.innerHTML  = getZero(t.seconds);
+            days.innerHTML = getZero(t.days); // from return object in getTimeRemaining(endtime)
+            hours.innerHTML = getZero(t.hours);
+            minutes.innerHTML = getZero(t.minutes);
+            seconds.innerHTML = getZero(t.seconds);
 
             //when deadline is the end
-            if (t.total <= 0 ) {
+            if (t.total <= 0) {
                 clearInterval(timeInterval);
             }
-        };  
+        };
     };
-    setClock('.timer', deadline);  
+    setClock('.timer', deadline);
 
 
     // MODAL
@@ -117,19 +117,25 @@ window.addEventListener('DOMContentLoaded', () => {
     const openBtns = document.querySelectorAll('[data-modal]');
     const closeBtn = document.querySelector('[data-close]');
     const modal = document.querySelector('.modal');
-   
+
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId); //clean timer after first time user see modal automatically
+    };
+
+
     openBtns.forEach((item) => {
         item.addEventListener('click', () => {
-            modal.classList.add('show');
-            modal.classList.remove('hide');
-            document.body.style.overflow = 'hidden';
+            openModal();
         });
     });
 
     function closeModal() {
-            modal.classList.add('hide');
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
+        modal.classList.add('hide');
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
     }
 
     closeBtn.addEventListener('click', closeModal);
@@ -137,7 +143,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-           closeModal();
+            closeModal();
         }
     });
 
@@ -148,5 +154,18 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }
     });
+
+    // after 5s modal opens automatically
+    const modalTimerId = setTimeout(openModal, 5000);
+
+    //when user scroll down to the end - modal opens - only one time
+    function showModalByScroll () {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
+        }
+    };
+    
+    window.addEventListener('scroll', showModalByScroll);
 
 });
