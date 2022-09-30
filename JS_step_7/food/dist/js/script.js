@@ -226,6 +226,12 @@ window.addEventListener('DOMContentLoaded', () => {
     if (e.target === modal) {
       closeModal();
     }
+  }); //event for key on keyboard
+
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Escape' && modal.classList.contains('show')) {
+      closeModal();
+    }
   });
 });
 
