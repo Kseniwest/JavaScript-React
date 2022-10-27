@@ -240,4 +240,57 @@ window.addEventListener('DOMContentLoaded', () => {
         'menu__item'
     ).render();
 
+    //Forms
+    const forms = document.querySelectorAll('form');
+    const message = {
+        loading: 'Загрузка',
+        success: 'Спасибо! Скоро мы с вами свяжемся!',
+        failure: 'Что-то пошло не так...'
+    };
+
+    forms.forEach(item => {
+        postData(item);
+    }); //подвязываем функцию к каждой форме
+
+    function postData (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const statusMessage = document.createElement('div');
+            statusMessage.classList.add('service');
+            statusMessage.textContent = message.loading;
+            form.append
+            (statusMessage); //добавлем к форме сообщение
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+
+            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            const formData = new FormData(form);
+            const object = {};
+            formData.forEach(function(valey, key){
+                object[key] = valey;
+            });
+            const json = JSON.stringify(object);
+
+            request.send(json);
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                    form.reset(); //сбрасываем форму
+                    setTimeout (() => {
+                        statusMessage.remove();
+                        closeModal();
+                    }, 2000); //удаляем сообщение и модал
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            });
+
+        });
+
+    };
+
 });
