@@ -248,45 +248,45 @@ window.addEventListener('DOMContentLoaded', () => {
 
     forms.forEach(item => {
         postData(item);
-    }); //подвязываем функцию к каждой форме
+    }); //bind a function to each form
 
     function postData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const statusMessage = document.createElement('img');
-            statusMessage.src = message.loading; //создала изображение пи подставила src
+            statusMessage.src = message.loading; //created an image and inserted src
             statusMessage.style.cssText = `
             display: block;
             margin: 0 auto;
             `
-           //добавлем svg в конец формы 
-            form.insertAdjacentElement('afterend',statusMessage);
-            
-            
-            const request = new XMLHttpRequest();
-            request.open('POST', 'server.php');
+            //add svg to the end of the form 
+            form.insertAdjacentElement('afterend', statusMessage);
 
-            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
             const formData = new FormData(form);
+
             const object = {};
             formData.forEach(function (valey, key) {
                 object[key] = valey;
             });
-            const json = JSON.stringify(object);
 
-            request.send(json);
-
-            request.addEventListener('load', () => {
-                if (request.status === 200) {
-                    console.log(request.response);
-                    showThanksModal(message.success);
-                    form.reset(); //сбрасываем форму
-                    statusMessage.remove();
-                } else {
-                    showThanksModal(message.failure);
-                }
-            });
+            fetch('server.php', {
+                method: "POST",
+                headers: {
+                    'Content-type':'application/json'
+                },
+                body: JSON.stringify(object)
+            })
+            .then(data => data.text())
+            .then(data => {
+                console.log(data);
+                showThanksModal(message.success);
+                statusMessage.remove();
+            }).catch(() => {//processing if there is an error
+                showThanksModal(message.failure);
+            }).finally(() => {//actions that are always performed - clearing the form
+                form.reset();
+            })
 
         });
 
