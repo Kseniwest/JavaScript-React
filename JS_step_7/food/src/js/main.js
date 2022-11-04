@@ -207,36 +207,24 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        'Меню "Фитнес"',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        21,
-        '.menu .container',
-        'menu__item'
+    const getResource = async (url) => {
+        let res = await fetch(url)
+        //получаем ответ от сервера
+        //обработаем как json формат
+        if(!res.ok){//если в запросе что-то пошло нет так
+            throw new Error(`Could not fetch ${url}, status ${res.status}`)//создаем обьект ошибки и выкидываем с помощью throw
+        }
+        return await res.json(); //возращаем промис
 
-    ).render();
+    };
+    
+    getResource('http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').render();//будет создавать столько раз сколько есть в db.json    
+            });//перебираем массив так как у нас массив с обьектами в db.json
 
-    new MenuCard(
-        "img/tabs/elite.jpg",
-        "elite",
-        'Меню “Премиум”',
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        24,
-        '.menu .container',
-        'menu__item'
-    ).render();
-
-    new MenuCard(
-        "img/tabs/post.jpg",
-        "post",
-        'Меню "Постное"',
-        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков.',
-        22,
-        '.menu .container',
-        'menu__item'
-    ).render();
+        }); //придет обычный обьект и мы можем его уже использовать
 
     //Forms
     const forms = document.querySelectorAll('form');
@@ -247,14 +235,28 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     }); //bind a function to each form
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        let res = await fetch(url, { //посылает запрос на сервер
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        })
+        //получаем ответ от сервера
+        //обработаем как json формат
+        return await res.json(); //возращаем промис
+
+    };
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const statusMessage = document.createElement('img');
+            let statusMessage = document.createElement('img');
             statusMessage.src = message.loading; //created an image and inserted src
             statusMessage.style.cssText = `
             display: block;
@@ -262,22 +264,13 @@ window.addEventListener('DOMContentLoaded', () => {
             `
             //add svg to the end of the form 
             form.insertAdjacentElement('afterend', statusMessage);
-
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function (valey, key) {
-                object[key] = valey;
-            });
-
-            fetch('server.php', {
-                method: "POST",
-                headers: {
-                    'Content-type':'application/json'
-                },
-                body: JSON.stringify(object)
-            })
-            .then(data => data.text())
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
+            //entries - превратить обьект в массив с массивами
+            //fromEntries - превращает в обьект
+            //JSON.stringify - превращает в json
+            postData('http://localhost:3000/requests', json)
             .then(data => {
                 console.log(data);
                 showThanksModal(message.success);
@@ -312,5 +305,9 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     };
+
+    fetch('http://localhost:3000/menu')
+    .then(data => data.json())
+    .then(res => console.log(res));
 
 });
