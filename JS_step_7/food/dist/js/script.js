@@ -2846,7 +2846,53 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   ;
-  fetch('http://localhost:3000/menu').then(data => data.json()).then(res => console.log(res));
+  fetch('http://localhost:3000/menu').then(data => data.json()).then(res => console.log(res)); //SLIDER - option 1
+
+  const nextSlide = document.querySelector('.offer__slider-next');
+  const prevSlide = document.querySelector('.offer__slider-prev');
+  const currentSlide = document.querySelector('#current');
+  const totalSlide = document.querySelector('#total');
+  const imageSlide = document.querySelectorAll('.offer__slide');
+  let slideIndex = 1;
+  showSlides(slideIndex);
+
+  if (imageSlide.length < 10) {
+    totalSlide.textContent = `0${imageSlide.length}`;
+  } else {
+    totalSlide.textContent = imageSlide.length;
+  }
+
+  function showSlides(n) {
+    if (n > imageSlide.length) {
+      slideIndex = 1;
+    }
+
+    if (n < 1) {
+      slideIndex = imageSlide.length;
+    }
+
+    imageSlide.forEach(item => {
+      item.style.display = 'none';
+    });
+    imageSlide[slideIndex - 1].style.display = 'block';
+
+    if (imageSlide.length < 10) {
+      currentSlide.textContent = `0${slideIndex}`;
+    } else {
+      currentSlide.textContent = slideIndex;
+    }
+  }
+
+  function plusSlides(n) {
+    showSlides(slideIndex += n);
+  }
+
+  prevSlide.addEventListener('click', () => {
+    plusSlides(-1);
+  });
+  nextSlide.addEventListener('click', () => {
+    plusSlides(1);
+  });
 });
 
 /***/ })
