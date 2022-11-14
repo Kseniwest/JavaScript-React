@@ -18,7 +18,7 @@ window.addEventListener('DOMContentLoaded', () => {
     recursy(body);
 
 
-    fetch('http://localhost:3000/header', {
+    fetch('http://localhost:3000/requests', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -27,6 +27,4 @@ window.addEventListener('DOMContentLoaded', () => {
     })
         .then(response => response.json())
         .then(json => console.log(json));
-
-
 });
