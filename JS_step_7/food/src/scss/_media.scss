@@ -141,9 +141,19 @@
         &__text {
             width: 350px;
         }
-        &__slider {
+
+        &__slider-wrapper{
             width: 400px;
         }
+
+        &__advantages{
+            font-size: 14px;
+            margin-top: 0;
+        }
+        &__advantages-text{
+            font-size: 14px;
+        }
+
         &__descr{
             font-size: 14px;
             line-height: 20px;
@@ -200,9 +210,15 @@
         }
     }
     .offer {
-        &__slide {
+        &__slider-wrapper{
             width: 300px;
-            height: 200px;
+            height: 300px;
+        }
+        &__advantages{
+            margin-top: 0;
+        }
+        &__advantages-text{
+            font-size: 14px;
         }
     }
     .order {
@@ -329,6 +345,7 @@
         justify-content: center;
     }
     .offer {
+        padding: 70px 0 220px 0;
         &__action {
            display: none;
         }

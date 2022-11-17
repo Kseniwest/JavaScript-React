@@ -800,8 +800,15 @@ a {
   .offer__text {
     width: 350px;
   }
-  .offer__slider {
+  .offer__slider-wrapper {
     width: 400px;
+  }
+  .offer__advantages {
+    font-size: 14px;
+    margin-top: 0;
+  }
+  .offer__advantages-text {
+    font-size: 14px;
   }
   .offer__descr {
     font-size: 14px;
@@ -853,9 +860,15 @@ a {
     margin-left: 10px;
   }
 
-  .offer__slide {
+  .offer__slider-wrapper {
     width: 300px;
-    height: 200px;
+    height: 300px;
+  }
+  .offer__advantages {
+    margin-top: 0;
+  }
+  .offer__advantages-text {
+    font-size: 14px;
   }
 
   .order__input {
@@ -981,6 +994,9 @@ a {
     justify-content: center;
   }
 
+  .offer {
+    padding: 70px 0 220px 0;
+  }
   .offer__action {
     display: none;
   }

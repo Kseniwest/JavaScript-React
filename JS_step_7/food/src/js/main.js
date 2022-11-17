@@ -211,16 +211,16 @@ window.addEventListener('DOMContentLoaded', () => {
         let res = await fetch(url)
         //получаем ответ от сервера
         //обработаем как json формат
-        if(!res.ok){//если в запросе что-то пошло нет так
+        if (!res.ok) {//если в запросе что-то пошло нет так
             throw new Error(`Could not fetch ${url}, status ${res.status}`)//создаем обьект ошибки и выкидываем с помощью throw
         }
         return await res.json(); //возращаем промис
 
     };
-    
+
     getResource('http://localhost:3000/menu')
         .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => {
+            data.forEach(({ img, altimg, title, descr, price }) => {
                 new MenuCard(img, altimg, title, descr, price, '.menu .container').render();//будет создавать столько раз сколько есть в db.json    
             });//перебираем массив так как у нас массив с обьектами в db.json
 
@@ -271,15 +271,15 @@ window.addEventListener('DOMContentLoaded', () => {
             //fromEntries - превращает в обьект
             //JSON.stringify - превращает в json
             postData('http://localhost:3000/requests', json)
-            .then(data => {
-                console.log(data);
-                showThanksModal(message.success);
-                statusMessage.remove();
-            }).catch(() => {//processing if there is an error
-                showThanksModal(message.failure);
-            }).finally(() => {//actions that are always performed - clearing the form
-                form.reset();
-            })
+                .then(data => {
+                    console.log(data);
+                    showThanksModal(message.success);
+                    statusMessage.remove();
+                }).catch(() => {//processing if there is an error
+                    showThanksModal(message.failure);
+                }).finally(() => {//actions that are always performed - clearing the form
+                    form.reset();
+                })
 
         });
 
@@ -307,61 +307,137 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     fetch('http://localhost:3000/menu')
-    .then(data => data.json())
-    .then(res => console.log(res));
+        .then(data => data.json())
+        .then(res => console.log(res));
 
     //SLIDER - option 1
+    // const nextSlide = document.querySelector('.offer__slider-next');
+    // const prevSlide = document.querySelector('.offer__slider-prev');
+    // const currentSlide = document.querySelector('#current');
+    // const totalSlide = document.querySelector('#total');
+    // const imageSlide = document.querySelectorAll('.offer__slide');
+    // let slideIndex  = 1;
+
+    // showSlides(slideIndex);
+
+    // if (imageSlide.length < 10) {
+    //     totalSlide.textContent = `0${imageSlide.length}`;
+    // }else{
+    //     totalSlide.textContent = imageSlide.length;
+    // }
+
+    // function showSlides(n){
+    //     if (n > imageSlide.length) {
+    //         slideIndex  = 1;
+    //     }
+
+    //     if (n < 1) {
+    //         slideIndex  = imageSlide.length;
+    //     }
+
+    //     imageSlide.forEach(item => {
+    //         item.style.display = 'none';
+    //     }); 
+
+    //     imageSlide[slideIndex - 1].style.display = 'block';
+
+    //     if (imageSlide.length < 10) {
+    //         currentSlide.textContent = `0${slideIndex}`;
+    //     }else{
+    //         currentSlide.textContent = slideIndex;
+    //     }
+    // }
+
+
+    // function plusSlides(n){
+    //     showSlides(slideIndex += n);
+    // }
+
+    // prevSlide.addEventListener('click', () => {
+    //     plusSlides(-1);
+    // });
+
+    // nextSlide.addEventListener('click', () => {
+    //     plusSlides(1);
+    // });
+
+    //SLIDER - option 2
+    //создаем доп оберку в html - 
     const nextSlide = document.querySelector('.offer__slider-next');
     const prevSlide = document.querySelector('.offer__slider-prev');
     const currentSlide = document.querySelector('#current');
     const totalSlide = document.querySelector('#total');
     const imageSlide = document.querySelectorAll('.offer__slide');
-    let slideIndex  = 1;
-
-    showSlides(slideIndex);
+    const slidesWrapper = document.querySelector('.offer__slider-wrapper');
+    const slidesField = document.querySelector('.offer__slider-inner');
+    const width = window.getComputedStyle(slidesWrapper).width;
+    let slideIndex = 1;
+    let offset = 0;
 
     if (imageSlide.length < 10) {
         totalSlide.textContent = `0${imageSlide.length}`;
-    }else{
+        currentSlide.textContent = `0${slideIndex}`;
+    } else {
         totalSlide.textContent = imageSlide.length;
-    }
+        currentSlide.textContent = slideIndex;
+    };
 
-    function showSlides(n){
-        if (n > imageSlide.length) {
-            slideIndex  = 1;
-        }
-        
-        if (n < 1) {
-            slideIndex  = imageSlide.length;
-        }
+    slidesField.style.width = 100 * imageSlide.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
 
-        imageSlide.forEach(item => {
-            item.style.display = 'none';
-        }); 
+    slidesWrapper.style.overflow = 'hidden'; //cкрываем все элементы которые не попадают в поле видимости
 
-        imageSlide[slideIndex - 1].style.display = 'block';
-
-        if (imageSlide.length < 10) {
-            currentSlide.textContent = `0${slideIndex}`;
-        }else{
-            currentSlide.textContent = slideIndex;
-        }
-    }
-    
-
-    function plusSlides(n){
-        showSlides(slideIndex += n);
-    }
-
-    prevSlide.addEventListener('click', () => {
-        plusSlides(-1);
+    imageSlide.forEach(slide => {
+        slide.style.width = width;
     });
 
     nextSlide.addEventListener('click', () => {
-        plusSlides(1);
+        if (offset == +width.slice(0, width.length - 2) * (imageSlide.length - 1)) {
+            offset = 0;
+        } else {
+            offset += +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == imageSlide.length) {
+            slideIndex = 1; 
+        } else {
+            slideIndex++;
+        };
+
+        if (imageSlide.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+    });
+
+    prevSlide.addEventListener('click', () => {
+        console.log(width);
+        if (offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (imageSlide.length - 1);
+        } else {
+            offset -= +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if (slideIndex == 1) {
+            slideIndex = imageSlide.length;
+        } else {
+            slideIndex--;
+        };
+
+        if (imageSlide.length < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
     });
 
 
-   
+
 
 });
