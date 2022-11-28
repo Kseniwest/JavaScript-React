@@ -402,7 +402,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 
-    for(let i = 0; i < imageSlide.length; i++) {
+    for (let i = 0; i < imageSlide.length; i++) {
         const dot = document.createElement('li');
         dot.setAttribute('data-slide-to', i + 1);
         dot.classList.add('dot');
@@ -414,7 +414,7 @@ window.addEventListener('DOMContentLoaded', () => {
         dotsArray.push(dot);
     }
 
-    function deleteNotNumbers(str){
+    function deleteNotNumbers(str) {
         return +str.replace(/\D/g, '');
     };
 
@@ -428,7 +428,7 @@ window.addEventListener('DOMContentLoaded', () => {
         slidesField.style.transform = `translateX(-${offset}px)`;
 
         if (slideIndex == imageSlide.length) {
-            slideIndex = 1; 
+            slideIndex = 1;
         } else {
             slideIndex++;
         };
@@ -440,7 +440,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         //dots
-        dotsArray.forEach (dot => {
+        dotsArray.forEach(dot => {
             dot.style.opacity = '.5';
         });
 
@@ -470,14 +470,14 @@ window.addEventListener('DOMContentLoaded', () => {
         }
 
         //dots
-        dotsArray.forEach (dot => {
+        dotsArray.forEach(dot => {
             dot.style.opacity = '.5';
         });
 
         dotsArray[slideIndex - 1].style.opacity = '1';
     });
 
-    dotsArray.forEach (dot => {
+    dotsArray.forEach(dot => {
         dot.addEventListener('click', (e) => {
             const slideTo = e.target.getAttribute('data-slide-to');
 
@@ -486,7 +486,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
-            dotsArray.forEach (dot => {
+            dotsArray.forEach(dot => {
                 dot.style.opacity = '.5';
             });
             dotsArray[slideIndex - 1].style.opacity = '1';
@@ -499,54 +499,76 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    
+
     //Calculator
     const result = document.querySelector('.calculating__result span');
-    let sex, height, weight, age, ratio;
+    let sex = 'female',
+        height,
+        weight,
+        age,
+        ratio = "1.375";
 
     function calcTotal() {
         if (!sex || !height || !weight || !age || !ratio) {
-           result.textContent = '0';
-           return;
+            result.textContent = '0';
+            return;
         }
 
         if (sex === 'female') {
-            result.textContent = (447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio;
+            result.textContent = Math.round((447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age)) * ratio);
         } else {
-            result.textContent = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio;
+            result.textContent = Math.round((88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age)) * ratio);
         }
 
     };
 
     calcTotal();
 
-    function getStaticInfo (parentSelector, activeClass){
+    function getStaticInfo(parentSelector, activeClass) {
         const elements = document.querySelectorAll(`${parentSelector} div`);
-        
-        document.querySelector(parentSelector).addEventListener('click', (e) => {
-            if (e.target.getAttribute('data-ratio')) {
-                ratio = +e.target.getAttribute('data-ratio');
-            } else {
-                sex = e.target.getAttribute('id');
-            }
-            
 
-            console.log(ratio, sex);
+        elements.forEach(elem => {
+            elem.addEventListener('click', (e) => {
+                if (e.target.getAttribute('data-ratio')) {
+                    ratio = +e.target.getAttribute('data-ratio');
+                } else {
+                    sex = e.target.getAttribute('id');
+                }
+                elements.forEach(elem => {
+                    elem.classList.remove(activeClass);
+                });
 
-            elements.forEach(elem => {
-                elem.classList.remove(activeClass);
+                e.target.classList.add(activeClass); //имеено тому диву на который кликнули назначаем класс
+
+                calcTotal();
             });
-
-            e.target.classList.add(activeClass); //имеено тому диву на который кликнули назначаем класс
         });
 
-    } 
+    }
 
     getStaticInfo('#gender', 'calculating__choose-item_active');
     getStaticInfo('.calculating__choose_big', 'calculating__choose-item_active');
 
-    // function getDynamicInfo (selectorInput){
-    //     const input = document.querySelector(selectorInput);
+    function getDynamicInfo(selectorInput) {
+        const input = document.querySelector(selectorInput);
 
-    // };
+        input.addEventListener('input', () => {
+            switch (input.getAttribute('id')) {
+                case 'height':
+                    height = +input.value;
+                    break; //останавливаем если так
+                case 'weight':
+                    weight = +input.value;
+                    break; //останавливаем если так
+                case 'age':
+                    age = +input.value;
+                    break; //останавливаем если так
+            }
+
+            calcTotal();
+        });
+    };
+    getDynamicInfo('#height');
+    getDynamicInfo('#weight');
+    getDynamicInfo('#age');
 });
